@@ -1,4 +1,9 @@
 <script>
+    import Icon from 'svelte-icons-pack/Icon.svelte';
+    import FaSolidFolder from 'svelte-icons-pack/fa/FaSolidFolder';
+    import {fly} from 'svelte/transition';
+
+    import Nav from './Nav.svelte';
 
     const BASE_URL = "https://idr.openmicroscopy.org/";
 
@@ -53,31 +58,41 @@
     const promise = getStudies();
 </script>
 
+<Nav></Nav>
 <main>
+
 	<h1>IDR tables</h1>
 	
+    <ul>
 	{#await promise}
-		<p>...waiting</p>
+		<li>...waiting</li>
 	{:then data}
-		<ul>
-		{#each data as study}
-			<li>
-                {study.Name} {study.objId} {study.tables.length}
+		{#each data as study, i}
+			<li class="study" transition:fly="{{ x: -200, duration: 500, delay: i * 20 }}">
+                {#if study.objId.includes('screen')}
+                    <Icon src={FaSolidFolder} size="50" color="rgb(80, 78, 79)"/>
+	            {:else}
+                    <Icon src={FaSolidFolder} size="50" color="rgb(131, 143, 163)"/>
+	            {/if}
+                <div>
+                {study.Name}
                 <ul>
                     {#each study.tables as ann}
                         <li>
                             <a target="_blank" href="{PARADE}{ann.file.id}/csv/">
-                                {ann.file.name} {formatBytes(ann.file.size)}
+                                {ann.file.name}
                             </a>
+                            ({formatBytes(ann.file.size)})
                         </li>
                     {/each}
                 </ul>
+                </div>
             </li>
 		{/each}
-		</ul>
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
+    </ul>
 </main>
 
 <style>
@@ -89,15 +104,28 @@
 	}
 
 	h1 {
-		color: #ff3e00;
 		text-transform: uppercase;
-		font-size: 4em;
+		font-size: 3em;
 		font-weight: 100;
+        margin-top: 40px;
 	}
 
     ul {
         width: fit-content;
         text-align: left;
+    }
+
+    li.study {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .study div {
+        padding: 5px 10px;
+    }
+
+    li {
+        list-style: none;
     }
 
 	@media (min-width: 640px) {

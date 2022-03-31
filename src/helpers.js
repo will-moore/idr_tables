@@ -1,14 +1,27 @@
 
 export const BASE_URL = "https://idr.openmicroscopy.org/";
 
-export async function getStudies() {
-    let studies = await Promise.all([
-        fetch(BASE_URL + "api/v0/m/projects/?childCount=true"),
-        fetch(BASE_URL + "api/v0/m/screens/?childCount=true"),
-    ]).then(responses =>
-        Promise.all(responses.map(res => res.json()))
-    ).then(([projects, screens]) => projects.data.concat(screens.data));
-
+export async function getStudies(parent) {
+    let studies = []
+    if (!parent) {
+        // No parent - load top-level Projects & Screens
+        studies = await Promise.all([
+            fetch(BASE_URL + "api/v0/m/projects/?childCount=true"),
+            fetch(BASE_URL + "api/v0/m/screens/?childCount=true"),
+        ]).then(responses =>
+            Promise.all(responses.map(res => res.json()))
+        ).then(([projects, screens]) => projects.data.concat(screens.data));
+    } else {
+        let url;
+        if (parent['@type'].includes("Project")) {
+            url = BASE_URL + `api/v0/m/projects/${parent["@id"]}/datasets/?childCount=true`
+        } else if (parent['@type'].includes("Screen")) {
+            url = BASE_URL + `api/v0/m/screens/${parent["@id"]}/plates/?childCount=true`
+        } else if (parent['@type'].includes("Dataset")) {
+            url = BASE_URL + `api/v0/m/datasets/${parent["@id"]}/images/`
+        }
+        studies = await fetch(url).then(rsp => rsp.json()).then(result => result.data);
+    }
 
     studies = studies.map(study => {
         let objId = `${study["@type"].split("#")[1].toLowerCase()}-${study["@id"]}`;

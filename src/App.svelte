@@ -1,6 +1,6 @@
 <script>
     import Nav from './Nav.svelte';
-    import StudyTree from './StudyTree.svelte';
+    import TreeChildren from './TreeChildren.svelte';
 </script>
 
 <Nav></Nav>
@@ -8,7 +8,7 @@
 
 	<h1>IDR tables</h1>
 	
-    <StudyTree></StudyTree>
+    <TreeChildren></TreeChildren>
 </main>
 
 <style>

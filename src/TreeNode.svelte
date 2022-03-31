@@ -6,6 +6,7 @@
     import FaSolidCaretRight from 'svelte-icons-pack/fa/FaSolidCaretRight';
 
     import {formatBytes} from './utils';
+    import TreeChildren from './TreeChildren.svelte';
 
     const PARADE = "https://parade-crossfilter.netlify.app/?csv=https://idr.openmicroscopy.org/webclient/omero_table/";
 
@@ -20,29 +21,47 @@
 </script>
 
 
-<li class="study" transition:fly="{{ x: -200, duration: 500, delay: index * 50 }}">
+<li class="study" in:fly="{{ x: -200, duration: 500, delay: index * 50 }}">
     <div class="caret">
-        <Icon src={FaSolidCaretRight} size="16" className="icon-caret {open ? 'icon-open' : ''}"/>
+        <Icon src={FaSolidCaretRight} size="16" className="icon-caret {open ? 'icon-open' : ''} {study["omero:childCount"] > 0 ? '' : 'hidden'}"/>
     </div>
-    {#if study.objId.includes('screen')}
-        <Icon src={FaSolidFolder} size="50" color="rgb(80, 78, 79)"/>
-    {:else}
-        <Icon src={FaSolidFolder} size="50" color="rgb(131, 143, 163)"/>
-    {/if}
-    <div class="treeNode">
-        <div on:click={toggle}>
-            {study.Name}
+    <div>
+        <div class="treeNode">
+            {#if study.objId.includes('screen')}
+                <Icon src={FaSolidFolder} size="50" color="rgb(80, 78, 79)"/>
+            {:else if study.objId.includes('project')}
+                <Icon src={FaSolidFolder} size="50" color="rgb(131, 143, 163)"/>
+            {:else if study.objId.includes('plate')}
+                <Icon src={FaSolidFolder} size="50" color="rgb(51, 53, 57)"/>
+            {:else if study.objId.includes('dataset')}
+                <Icon src={FaSolidFolder} size="50" color="rgb(156, 178, 132)"/>
+            {:else}
+                <Icon src={FaSolidFolder} size="50" color="rgb(226, 226, 227)"/>
+            {/if}
+            <div class="nodeName">
+                <div on:click={toggle}>
+                    {study.Name}
+                    {#if study["omero:childCount"]}
+                        ({study["omero:childCount"]})
+                    {/if}
+                </div>
+                <ul>
+                    {#each study.tables as ann}
+                        <li>
+                            <a target="_blank" href="{PARADE}{ann.file.id}/csv/">
+                                {ann.file.name}
+                            </a>
+                            <span>({formatBytes(ann.file.size)})</span>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         </div>
-        <ul>
-            {#each study.tables as ann}
-                <li>
-                    <a target="_blank" href="{PARADE}{ann.file.id}/csv/">
-                        {ann.file.name}
-                    </a>
-                    <span>({formatBytes(ann.file.size)})</span>
-                </li>
-            {/each}
-        </ul>
+        <div>
+            {#if open && study["omero:childCount"] > 0}
+                <TreeChildren parent={study}></TreeChildren>
+            {/if}
+        </div>
     </div>
 </li>
 
@@ -53,6 +72,9 @@
     }
     :global(.icon-open) {
         transform:rotate(90deg);
+    }
+    :global(.hidden) {
+        visibility: hidden;
     }
     .caret {
         padding: 0;
@@ -71,6 +93,10 @@
     }
 
     .treeNode {
+        display: flex;
+        flex-direction: row;
+    }
+    .nodeName {
         padding: 5px 10px;
     }
 

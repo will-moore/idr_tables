@@ -11,7 +11,7 @@
 
 <ul>
 {#await promise}
-    <li>...</li>
+    <li>loading...</li>
 {:then data}
     {#each data as study, i}
         <TreeNode study={study} index={i}></TreeNode>

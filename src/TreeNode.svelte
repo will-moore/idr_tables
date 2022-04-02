@@ -113,6 +113,7 @@
         cursor: default;
     }
     .nodeText {
+        text-align: left;
         padding: 5px 10px;
         /* all shrinking handled by this element */
         flex-shrink: 10000000000;

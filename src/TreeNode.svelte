@@ -18,6 +18,17 @@
 	function toggleOpen() {
 		open = !open;
 	}
+
+    import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+
+	function handleTableClick(ann) {
+        console.log('handleTableClick..', ann)
+		dispatch('tableclick', {
+			annotation: ann
+		});
+	}
 </script>
 
 
@@ -50,7 +61,7 @@
                 <ul>
                     {#each study.tables as ann}
                         <li>
-                            <a target="_blank" href="{PARADE}{ann.file.id}/csv/">
+                            <a on:click|preventDefault="{e => handleTableClick(ann)}" target="_blank" href="#">
                                 {ann.file.name}
                             </a>
                             <span>({formatBytes(ann.file.size)})</span>

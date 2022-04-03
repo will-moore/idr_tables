@@ -1,7 +1,16 @@
 <script>
     import Nav from './Nav.svelte';
     import TreeChildren from './TreeChildren.svelte';
+    import TableAnnotation from './TableAnnotation.svelte';
+
+    let annotationObj;
+
+    function setTableId(event) {
+		console.log('tableId', event.detail)
+        annotationObj = event.detail.annotation;
+	}
 </script>
+
 
 <main>
     <nav>
@@ -9,10 +18,12 @@
     </nav>
     <section class="treeSection">
         <h1>IDR tables</h1>
-        <TreeChildren></TreeChildren>
+        <TreeChildren on:tableclick={setTableId}></TreeChildren>
     </section>
     <section>
-
+        {#if annotationObj}
+        <TableAnnotation annotation={annotationObj}></TableAnnotation>
+        {/if}
     </section>
 </main>
 

@@ -49,3 +49,8 @@ export async function getStudies(parent) {
     });
     return studies;
 }
+
+
+export async function getJson(url) {
+    return await fetch(url).then(rsp => rsp.json());
+} 

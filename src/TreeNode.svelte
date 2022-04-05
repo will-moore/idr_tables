@@ -7,6 +7,7 @@
 
     import {formatBytes} from './utils';
     import TreeChildren from './TreeChildren.svelte';
+    import {fileAnnotation} from './store';
 
     const PARADE = "https://parade-crossfilter.netlify.app/?csv=https://idr.openmicroscopy.org/webclient/omero_table/";
 
@@ -19,15 +20,9 @@
 		open = !open;
 	}
 
-    import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
-
 	function handleTableClick(ann) {
         console.log('handleTableClick..', ann)
-		dispatch('tableclick', {
-			annotation: ann
-		});
+		fileAnnotation.update(() => ann);
 	}
 </script>
 

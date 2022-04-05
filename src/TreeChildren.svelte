@@ -14,7 +14,7 @@
     <li>loading...</li>
 {:then data}
     {#each data as study, i}
-        <TreeNode on:tableclick study={study} index={i}></TreeNode>
+        <TreeNode study={study} index={i}></TreeNode>
     {/each}
 {:catch error}
     <p style="color: red">{error.message}</p>

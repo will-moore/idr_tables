@@ -1,6 +1,7 @@
 
 <script>
 
+    import { fly } from 'svelte/transition';
     import {getJson} from './helpers';
     import OmeroTable from './OmeroTable.svelte';
 
@@ -26,14 +27,35 @@
         tableData = data.data;
 	});
 
+    function close() {
+        annotation = undefined;
+        tableData = undefined;
+    }
+
 </script>
 
 {#if annotation}
-<h1>
-    {annotation.link.parent.name} {annotation.file.name} ID: {annotation.file.id}
-</h1>
+<section transition:fly="{{ y: 200, duration: 1000 }}">
+    <h1>
+        {annotation.link.parent.name} {annotation.file.name} ID: {annotation.file.id}
+    </h1>
+
+    <button on:click={close}>X</button>
+
+    {#if tableData}
+        <OmeroTable tableData={tableData}></OmeroTable>
+    {/if}
+</section>
 {/if}
 
-{#if tableData}
-    <OmeroTable tableData={tableData}></OmeroTable>
-{/if}
+<style>
+section {
+    border-top: 1px solid #ddd;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 75%;
+    background: white;
+    overflow: auto;
+}
+</style>

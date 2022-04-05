@@ -13,9 +13,7 @@
         <h1>IDR tables</h1>
         <TreeChildren></TreeChildren>
     </section>
-    <section>
-        <TableAnnotation></TableAnnotation>
-    </section>
+    <TableAnnotation></TableAnnotation>
 </main>
 
 <style>
@@ -32,16 +30,10 @@
     }
 
     section {
-        flex: 1;
         overflow: auto;
         width: 100%;
-    }
-
-    .treeSection {
-        text-align: center;
-		padding: 1em;
-		margin: 0 auto;
-        border-bottom: 1px solid #ddd;
+        flex: 1;
+        padding: 1em;
     }
 
 	h1 {

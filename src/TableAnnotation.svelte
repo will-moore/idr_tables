@@ -36,15 +36,18 @@
 
 {#if annotation}
 <section transition:fly="{{ y: 200, duration: 1000 }}">
-    <h1>
-        {annotation.link.parent.name} {annotation.file.name} ID: {annotation.file.id}
-    </h1>
+    <div>
+        <h2>
+            {annotation.link.parent.name} {annotation.file.name} ID: {annotation.file.id}
+        </h2>
+        <button on:click={close}>X</button>
+    </div>
 
-    <button on:click={close}>X</button>
-
-    {#if tableData}
-        <OmeroTable tableData={tableData}></OmeroTable>
-    {/if}
+    <div class="table">
+        {#if tableData}
+            <OmeroTable tableData={tableData}></OmeroTable>
+        {/if}
+    </div>
 </section>
 {/if}
 
@@ -56,6 +59,29 @@ section {
     width: 100%;
     height: 75%;
     background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+div {
+    width: 100%;
+}
+
+.table {
+    flex: 1;
     overflow: auto;
 }
+
+h2 {
+    margin: 5px;
+    font-size: 1.25em;
+    font-weight: 200;
+}
+
+button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 </style>

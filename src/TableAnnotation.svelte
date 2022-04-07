@@ -39,6 +39,8 @@
     <div>
         <h2>
             {annotation.link.parent.name} {annotation.file.name} ID: {annotation.file.id}
+
+            <a target="_blank" href="https://parade-crossfilter.netlify.app/?csv=https://idr.openmicroscopy.org/webclient/omero_table/{annotation.file.id}/csv/">Open in Parade</a>
         </h2>
         <button on:click={close}>X</button>
     </div>
@@ -52,6 +54,26 @@
 {/if}
 
 <style>
+
+a {
+    margin: 0 20px;
+    display: inline-block;
+    border-radius: 6px;
+    padding: 0 10px;
+    line-height: 34px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #077acb;
+    border: 2px solid #077acb;
+    transition: background-color .1s ease;
+}
+a:hover {
+    background-color: #2087d0;
+    border: 2px solid #2087d0;
+    text-decoration: none;
+}
+
 section {
     border-top: 1px solid #ddd;
     position: absolute;
@@ -61,6 +83,7 @@ section {
     background: white;
     display: flex;
     flex-direction: column;
+    box-shadow: -1px -2px 10px -1px rgb(0 0 0 / 50%)
 }
 
 div {

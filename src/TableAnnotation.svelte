@@ -6,6 +6,7 @@
     import OmeroTable from './OmeroTable.svelte';
 
     import {fileAnnotation} from './store.js';
+    import {clickOutside} from './utils';
 
     let annotation;
     let tableData;
@@ -35,7 +36,7 @@
 </script>
 
 {#if annotation}
-<section transition:fly="{{ y: 200, duration: 1000 }}">
+<section use:clickOutside on:click_outside={close} transition:fly="{{ y: 200, duration: 1000 }}">
     <div>
         <h2>
             {annotation.link.parent.name} {annotation.file.name} ID: {annotation.file.id}

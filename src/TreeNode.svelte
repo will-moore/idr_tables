@@ -21,7 +21,7 @@
 	}
 
 	function handleTableClick(ann) {
-        console.log('handleTableClick..', ann)
+        // update the store - handled by TableAnnotation to load the Table data
 		fileAnnotation.update(() => ann);
 	}
 </script>
